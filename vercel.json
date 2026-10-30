@@ -1,0 +1,11 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/mobile-app/index.html" },
+    { "source": "/style.css", "destination": "/mobile-app/style.css" },
+    { "source": "/app.js", "destination": "/mobile-app/app.js" },
+    { "source": "/manifest.json", "destination": "/mobile-app/manifest.json" },
+    { "source": "/sw.js", "destination": "/mobile-app/sw.js" },
+    { "source": "/(.*)", "destination": "/mobile-app/$1" }
+  ]
+}
+
