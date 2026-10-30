@@ -1,0 +1,17 @@
+{
+  "name": "Mobo bot - EMO Companion",
+  "short_name": "Mobo bot",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#121316",
+  "theme_color": "#F5F6F8",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%23121316'/><rect x='20' y='25' width='60' height='45' rx='14' fill='%23FFFFFF'/><rect x='28' y='32' width='44' height='24' rx='8' fill='%23121316'/><rect x='34' y='38' width='8' height='12' rx='4' fill='%23D4FB46'/><rect x='58' y='38' width='8' height='12' rx='4' fill='%23D4FB46'/><path d='M30 73 C30 85 70 85 70 73 Z' fill='%23EAECEF'/></svg>",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}
+

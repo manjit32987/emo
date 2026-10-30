@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#F5F6F8">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Mobo bot">
+  <title>Mobo bot - EMO Companion</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header>
+    <div class="brand">
+      <div class="status-dot" id="bleDot"></div>
+      <span>Mobo bot</span>
+    </div>
+    <button class="ble-badge" id="bleConnectBtn" onclick="connectBle()">
+      <span>Connect BLE</span>
+    </button>
+  </header>
+
+  <!-- Alarm Alert Banner -->
+  <div id="alarmBanner">
+    <span>⏰ ALARM RINGING!</span>
+    <button onclick="dismissAlarm()">DISMISS</button>
+  </div>
+
+  <!-- ================= SCREEN 1: HERO HOME ================= -->
+  <div class="view active" id="tab-home">
+    <!-- Topographic Dark Hero Card -->
+    <div class="hero-card">
+      <div class="hero-top-row">
+        <div class="hero-title">Best Personal<br>AI Assistant</div>
+        <div class="lime-pill">V1.12</div>
+      </div>
+
+      <!-- 3D Mascot Avatar -->
+      <div class="robot-avatar">
+        <div class="robot-head">
+          <div class="robot-visor">
+            <div class="robot-eye"></div>
+            <div class="robot-eye"></div>
+          </div>
+        </div>
+        <div class="robot-base"></div>
+      </div>
+
+      <div class="hero-sub">How can I help you?</div>
+      <button class="hero-btn" onclick="switchTab('tab-chat', document.getElementById('nav-chat'))">
+        Start a new chat
+      </button>
+    </div>
+
+    <!-- Quick Emotion Triggers -->
+    <div class="section-head">
+      <div class="section-title">Expressive Moods</div>
+      <div class="section-sub">Live Trigger</div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom: 24px;">
+      <button class="mood-btn" onclick="triggerMood('NORMAL', 1)">😊 Normal</button>
+      <button class="mood-btn" onclick="triggerMood('HAPPY', 2)">🥰 Happy</button>
+      <button class="mood-btn" onclick="triggerMood('LOVE', 3)">💖 Love Hearts</button>
+      <button class="mood-btn" onclick="triggerMood('DIZZY', 4)">😵 Dizzy Wobble</button>
+      <button class="mood-btn" onclick="triggerMood('SURPRISED', 5)">😲 Gasp Shock</button>
+      <button class="mood-btn" onclick="triggerMood('SLEEPY', 6)">😴 Sleep Snore</button>
+      <button class="mood-btn" onclick="triggerMood('SAD', 9)">🥺 Sad Whimper</button>
+      <button class="mood-btn" onclick="triggerMood('ANGRY', 0)">😡 Angry Brow</button>
+    </div>
+  </div>
+
+  <!-- ================= SCREEN 2: CHAT ================= -->
+  <div class="view" id="tab-chat">
+    <div class="chat-box">
+      <div class="chat-header">
+        <div class="chat-bot-info">
+          <div class="chat-bot-avatar">🤖</div>
+          <div>
+            <div style="font-weight: 800; font-size: 0.95rem;">Mobo bot</div>
+            <div style="font-size: 0.76rem; color: #10B981; font-weight: 600;">• Online</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-messages" id="chatList">
+        <div class="bubble-wrap bot">
+          <div class="bubble bot">Welcome to your EMO Mobo Bot! How can I help you?</div>
+        </div>
+        <div class="bubble-wrap user">
+          <div class="bubble user">Hi there! Show me a happy expression.</div>
+        </div>
+        <div class="bubble-wrap bot">
+          <div class="bubble bot">Playing happy giggle and smiling crescent eyes! 🥰</div>
+        </div>
+      </div>
+
+      <div class="chat-bar">
+        <input type="text" class="chat-input" id="chatInput" placeholder="Ask Mobo bot..." onkeydown="if(event.key==='Enter') sendChat()">
+        <button class="chat-send" onclick="sendChat()">➔</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SCREEN 3: CONTROLS & ALARMS ================= -->
+  <div class="view" id="tab-controls">
+    <!-- Category Filter Pills (Matches Reference Image) -->
+    <div class="filter-pills">
+      <button class="pill-tag active" onclick="filterControls('all', this)">All</button>
+      <button class="pill-tag" onclick="filterControls('alarms', this)">Alarms</button>
+      <button class="pill-tag" onclick="filterControls('sound', this)">Sound</button>
+      <button class="pill-tag" onclick="filterControls('modes', this)">Modes</button>
+      <button class="pill-tag" onclick="filterControls('eyes', this)">Eyes</button>
+    </div>
+
+    <!-- Mode Card -->
+    <div class="card" data-category="modes">
+      <div class="card-row">
+        <div>
+          <div style="font-weight: 800; font-size: 0.95rem;">Autonomous AI Mode</div>
+          <div style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 3px;">
+            Reacts to physical tilts, head pets, and cheek pokes
+          </div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="autoModeSwitch" checked onchange="toggleAutoMode(this.checked)">
+          <span class="switch-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Alarms Card -->
+    <div class="card" data-category="alarms">
+      <div class="card-row" style="margin-bottom: 8px;">
+        <div style="font-weight: 800; font-size: 0.95rem;">Daily Alarms</div>
+        <button onclick="syncPhoneTime()" style="background: none; border: none; color: #007AFF; font-weight: 700; font-size: 0.82rem; cursor: pointer;">
+          📱 Sync Time
+        </button>
+      </div>
+
+      <div class="alarm-item">
+        <div>
+          <input type="time" value="07:00" id="alarmTime0" onchange="updateAlarm(0)" class="alarm-time" style="border:none; background:none;">
+          <div class="alarm-label">Morning Wakeup</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="alarmEn0" checked onchange="updateAlarm(0)">
+          <span class="switch-slider"></span>
+        </label>
+      </div>
+
+      <div class="alarm-item">
+        <div>
+          <input type="time" value="08:30" id="alarmTime1" onchange="updateAlarm(1)" class="alarm-time" style="border:none; background:none;">
+          <div class="alarm-label">Work Focus</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="alarmEn1" onchange="updateAlarm(1)">
+          <span class="switch-slider"></span>
+        </label>
+      </div>
+
+      <div class="alarm-item">
+        <div>
+          <input type="time" value="13:00" id="alarmTime2" onchange="updateAlarm(2)" class="alarm-time" style="border:none; background:none;">
+          <div class="alarm-label">Lunch Break</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="alarmEn2" checked onchange="updateAlarm(2)">
+          <span class="switch-slider"></span>
+        </label>
+      </div>
+
+      <div class="alarm-item" style="border-bottom: none;">
+        <div>
+          <input type="time" value="22:30" id="alarmTime3" onchange="updateAlarm(3)" class="alarm-time" style="border:none; background:none;">
+          <div class="alarm-label">Bedtime</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="alarmEn3" onchange="updateAlarm(3)">
+          <span class="switch-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Volume & Soundboard Card -->
+    <div class="card" data-category="sound">
+      <div class="card-row">
+        <div style="font-weight: 800; font-size: 0.95rem;">Master Volume</div>
+        <div id="volLabel" style="font-size: 0.85rem; font-weight: 800; color: var(--text-secondary);">22 / 30</div>
+      </div>
+      <div class="vol-row">
+        <button class="vol-pill" onclick="setVolume(0, this)">Mute</button>
+        <button class="vol-pill" onclick="setVolume(10, this)">10</button>
+        <button class="vol-pill active" onclick="setVolume(22, this)">22</button>
+        <button class="vol-pill" onclick="setVolume(30, this)">30</button>
+      </div>
+
+      <div style="font-weight: 800; font-size: 0.85rem; margin-bottom: 8px;">Soundboard FX</div>
+      <div class="grid-3">
+        <button class="sound-btn" onclick="playSound(1)">🔔 Startup</button>
+        <button class="sound-btn" onclick="playSound(2)">😄 Giggle</button>
+        <button class="sound-btn" onclick="playSound(3)">💕 Purr</button>
+        <button class="sound-btn" onclick="playSound(4)">🌀 Dizzy</button>
+        <button class="sound-btn" onclick="playSound(5)">😱 Gasp</button>
+        <button class="sound-btn" onclick="playSound(6)">💤 Yawn</button>
+        <button class="sound-btn" onclick="playSound(7)">👉 Poke</button>
+        <button class="sound-btn" onclick="playSound(8)">⏰ Alarm</button>
+        <button class="sound-btn" onclick="playSound(9)">😿 Whimper</button>
+      </div>
+    </div>
+
+    <!-- Eye Styles Card -->
+    <div class="card" data-category="eyes" style="margin-bottom: 30px;">
+      <div style="font-weight: 800; font-size: 0.95rem; margin-bottom: 10px;">Eye Style Themes</div>
+      <div class="grid-2">
+        <button class="sound-btn style-btn active" onclick="sendStyle(0)">🤖 EMO Classic</button>
+        <button class="sound-btn style-btn" onclick="sendStyle(1)">✨ Cute Round</button>
+        <button class="sound-btn style-btn" onclick="sendStyle(2)">⚡ Cyber Visor</button>
+        <button class="sound-btn style-btn" onclick="sendStyle(3)">🐾 Cat Eyes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= FLOATING BOTTOM NAVIGATION BAR ================= -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" id="nav-home" onclick="switchTab('tab-home', this)">
+      <span>Chats</span>
+    </button>
+    
+    <!-- Elevated Circular Neon Lime Button (+) -->
+    <button class="fab-center" onclick="triggerMood('LOVE', 3)">+</button>
+    
+    <button class="nav-btn" id="nav-controls" onclick="switchTab('tab-controls', this)">
+      <span>Controls</span>
+    </button>
+  </nav>
+
+  <script src="app.js"></script>
+</body>
+</html>
