@@ -90,10 +90,10 @@ void loop() {
   if (alarmCtrl.isAlarmRinging()) {
     displayCtrl.setMood(MOOD_ALARM);
 
-    // Ring alarm sound every 2.5 seconds
+    // Ring selected alarm tone every 2.5 seconds
     if (now - lastAlarmBeep > 2500) {
       lastAlarmBeep = now;
-      audioCtrl.play(SOUND_ALARM);
+      audioCtrl.play((SoundTrack)alarmCtrl.getAlarmTone());
     }
 
     // Dismiss alarm by physical touch on head or cheek (or from mobile app)

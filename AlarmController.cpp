@@ -5,6 +5,7 @@ AlarmController::AlarmController()
     _minutes(0),
     _seconds(0),
     _lastSecondTick(0),
+    _alarmTone(1), // Default to Track 1 (001.mp3 on MicroSD)
     _isRinging(false),
     _activeAlarmIndex(-1),
     _lastTriggeredMinute(-1) {
@@ -41,7 +42,8 @@ void AlarmController::update() {
             _isRinging = true;
             _activeAlarmIndex = i;
             _lastTriggeredMinute = _minutes;
-            Serial.printf("[Alarm] Alarm %d (%s) triggered at %02d:%02d!\n", i, _alarms[i].label, _hours, _minutes);
+            Serial.printf("[Alarm] Alarm %d (%s) triggered at %02d:%02d with tone track %d!\n", 
+                          i, _alarms[i].label, _hours, _minutes, _alarmTone);
             break;
           }
         }
@@ -87,6 +89,15 @@ int AlarmController::getAlarmCount() const {
   return MAX_ALARMS;
 }
 
+void AlarmController::setAlarmTone(uint8_t trackNumber) {
+  _alarmTone = constrain(trackNumber, 1, 99);
+  Serial.printf("[Alarm] Alarm tone changed to track: %03d.mp3\n", _alarmTone);
+}
+
+uint8_t AlarmController::getAlarmTone() const {
+  return _alarmTone;
+}
+
 bool AlarmController::isAlarmRinging() const {
   return _isRinging;
 }
@@ -106,4 +117,3 @@ void AlarmController::snoozeAlarm(int snoozeMinutes) {
   _minutes = (_minutes + snoozeMinutes) % 60;
   Serial.printf("[Alarm] Alarm snoozed for %d minutes.\n", snoozeMinutes);
 }
-

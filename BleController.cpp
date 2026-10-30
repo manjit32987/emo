@@ -103,6 +103,7 @@ void BleController::sendTelemetry() {
   json += "\"alarmRing\":" + String(_alarm.isAlarmRinging() ? "true" : "false") + ",";
   json += "\"tiltX\":" + String(_motion.getTiltX()) + ",";
   json += "\"tiltY\":" + String(_motion.getTiltY()) + ",";
+  json += "\"alarmTone\":" + String((int)_alarm.getAlarmTone()) + ",";
   json += "\"head\":" + String(_touch.isHeadHeld() ? "true" : "false") + ",";
   json += "\"cheek\":" + String(_touch.isCheekHeld() ? "true" : "false");
   json += "}\n";
@@ -172,7 +173,15 @@ void BleController::parseCommand(const String& cmdStr) {
     } else if (cmdStr.indexOf("\"trigger\"") >= 0) {
       _alarm.triggerAlarm();
       _display.setMood(MOOD_ALARM);
-      _audio.play(SOUND_ALARM);
+      _audio.play((SoundTrack)_alarm.getAlarmTone());
+    }
+  }
+  else if (cmdStr.indexOf("\"cmd\":\"alarm_tone\"") >= 0) {
+    int pos = cmdStr.indexOf("\"val\":");
+    if (pos >= 0) {
+      int tone = cmdStr.substring(pos + 6).toInt();
+      _alarm.setAlarmTone(tone);
+      _audio.play((SoundTrack)tone); // Play preview
     }
   }
   else if (cmdStr.indexOf("\"cmd\":\"time\"") >= 0) {

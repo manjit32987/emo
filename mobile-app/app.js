@@ -107,6 +107,11 @@ function onTelemetryReceived(event) {
     } else {
       banner.style.display = 'none';
     }
+
+    // Sync active alarm tone if reported by companion
+    if (data.alarmTone && document.getElementById('alarmToneSelect')) {
+      document.getElementById('alarmToneSelect').value = String(data.alarmTone);
+    }
   } catch (err) {
     // Non-JSON packet ignored
   }
@@ -183,6 +188,19 @@ function updateAlarm(index) {
 function dismissAlarm() {
   document.getElementById('alarmBanner').style.display = 'none';
   sendBleCommand({ cmd: "alarm_act", val: "dismiss" });
+}
+
+function changeAlarmTone(trackNumber) {
+  const tone = parseInt(trackNumber);
+  console.log("[Alarm] Setting alarm tone track:", tone);
+  sendBleCommand({ cmd: "alarm_tone", val: tone });
+}
+
+function previewAlarmTone() {
+  const toneSelect = document.getElementById('alarmToneSelect');
+  const tone = toneSelect ? parseInt(toneSelect.value) : 1;
+  console.log("[Alarm] Previewing tone track:", tone);
+  playSound(tone);
 }
 
 // ============================================================================

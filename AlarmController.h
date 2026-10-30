@@ -24,6 +24,10 @@ public:
   AlarmEntry getAlarm(int index) const;
   int getAlarmCount() const;
 
+  // Changeable Alarm Tone Track (e.g. 1 for 001.mp3, 2 for 002.mp3, etc.)
+  void setAlarmTone(uint8_t trackNumber);
+  uint8_t getAlarmTone() const;
+
   bool isAlarmRinging() const;
   void triggerAlarm();
   void dismissAlarm();
@@ -37,8 +41,8 @@ private:
 
   static const int MAX_ALARMS = 4;
   AlarmEntry _alarms[MAX_ALARMS];
+  uint8_t _alarmTone; // Default: 1 (001.mp3)
   bool _isRinging;
   int _activeAlarmIndex;
   int _lastTriggeredMinute;
 };
-

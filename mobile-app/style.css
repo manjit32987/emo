@@ -433,6 +433,35 @@ header {
   margin-top: 2px;
 }
 
+/* Tone selector in alarms */
+.tone-select {
+  background: #F0F2F5;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 8px 10px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  outline: none;
+  cursor: pointer;
+}
+
+.tone-preview-btn {
+  background: var(--accent-lime);
+  color: var(--card-dark);
+  border: none;
+  border-radius: 12px;
+  padding: 8px 14px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.tone-preview-btn:active {
+  transform: scale(0.94);
+}
+
 /* iOS-Style Toggle Switch */
 .switch {
   position: relative;
